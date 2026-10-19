@@ -36,3 +36,6 @@ build/
 
 ### SDKMAN! config file ###
 .sdkmanrc
+
+### Agent instructions ###
+agent_instructions
