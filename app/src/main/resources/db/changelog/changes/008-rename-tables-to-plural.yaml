@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: rename-tables-to-plural
+      author: ReduxR
+      changes:
+        - renameTable:
+            oldTableName: game
+            newTableName: games
+
+        - renameTable:
+            oldTableName: developer
+            newTableName: developers
+
+        - renameTable:
+            oldTableName: genre
+            newTableName: genres
+
+        - renameTable:
+            oldTableName: publisher
+            newTableName: publishers
+            
+        - renameTable: 
+            oldTableName: game_developer
+            newTableName: games_developers
+        
+        - renameTable:
+            oldTableName: game_genre
+            newTableName: games_genres
+              
+        - renameTable:
+            oldTableName: game_publisher
+            newTableName:  games_publishers
