@@ -1,5 +1,3 @@
-"""Download and profile a pinned Steam snapshot; imports only into an empty catalogue."""
-
 import argparse
 import hashlib
 import json

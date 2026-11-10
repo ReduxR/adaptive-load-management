@@ -13,3 +13,5 @@ databaseChangeLog:
       file: db/changelog/changes/006-create-publisher-table.yaml
   - include:
       file: db/changelog/changes/007-create-game-publisher-table.yaml
+  - include: 
+      file: db/changelog/changes/008-rename-tables-to-plural.yaml

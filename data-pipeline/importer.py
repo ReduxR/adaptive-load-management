@@ -1,5 +1,3 @@
-"""Transactional, empty-catalog-only import. Schema is owned by Liquibase."""
-
 import json
 from uuid import uuid4
 from collections import Counter
@@ -10,6 +8,11 @@ import duckdb
 import psycopg
 from psycopg import sql
 
+ID_COLUMNS = {
+    "genres": "genre_id",
+    "developers": "developer_id",
+    "publishers": "publisher_id",
+}
 
 def import_data(root):
     from pipeline import REVISION, FIELDS, digest, blank, write_json
@@ -25,7 +28,7 @@ def import_data(root):
               "normalization": Counter(), "rows_read": 0}
 
     games, links, seen = [], {}, set()
-    names = {entity: set() for entity in ("genre", "developer", "publisher")}
+    names = {entity: set() for entity in ID_COLUMNS}
 
     source = duckdb.connect()
     relation = source.read_parquet(str(path))
@@ -79,7 +82,7 @@ def import_data(root):
             links[app_id] = {}
 
             for entity in names:
-                values = row[entity + "s"]
+                values = row[entity]
                 if values is None:
                     values = []
                 if not isinstance(values, list) or any(v is not None and not isinstance(v, str) for v in values):
@@ -96,21 +99,21 @@ def import_data(root):
         for entity, values in names.items()
     }
 
-    tables = {"game": games}
-    columns = {"game": ["app_id", "name", "release_date", "price", "short_description"]}
+    tables = {"games": games}
+    columns = {"games": ["app_id", "name", "release_date", "price", "short_description"]}
 
     for entity, mapping in dictionaries.items():
         tables[entity] = [(i, name) for name, i in mapping.items()]
-        columns[entity] = [entity + "_id", "name"]
+        columns[entity] = [ID_COLUMNS[entity], "name"]
 
     for entity, mapping in dictionaries.items():
-        table = "game_" + entity
+        table = "games_" + entity
         tables[table] = [
             (app_id, mapping[name])
             for app_id, group in sorted(links.items())
             for name in group[entity]
         ]
-        columns[table] = ["app_id", entity + "_id"]
+        columns[table] = ["app_id", ID_COLUMNS[entity]]
 
     report["counts"] = {table: len(rows) for table, rows in tables.items()}
 
@@ -134,7 +137,7 @@ def import_data(root):
                     raise ValueError(f"Count mismatch in {table}")
 
             for entity, mapping in dictionaries.items():
-                sequence = con.execute("SELECT pg_get_serial_sequence(%s, %s)", (entity, entity + "_id")).fetchone()[0]
+                sequence = con.execute("SELECT pg_get_serial_sequence(%s, %s)", (entity, ID_COLUMNS[entity])).fetchone()[0]
                 if sequence is None:
                     raise ValueError(f"Missing identity sequence for {entity}")
                 con.execute(sql.SQL("ALTER SEQUENCE {} RESTART WITH {}").format(sql.Identifier(*sequence.split(".")), sql.Literal(len(mapping) + 1)))
