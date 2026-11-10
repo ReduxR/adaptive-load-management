@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: 003-create-game-genre-table
+      author: ReduxR
+      changes:
+        - createTable:
+            tableName: game_genre
+            columns:
+              - column:
+                  name: app_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: genre_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: game_genre
+            columnNames: app_id, genre_id
+            constraintName: pk_game_genre
+
+        - addForeignKeyConstraint:
+            baseTableName: game_genre
+            baseColumnNames: app_id
+            constraintName: fk_game_genre_game
+            referencedTableName: game
+            referencedColumnNames: app_id
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: game_genre
+            baseColumnNames: genre_id
+            constraintName: fk_game_genre_genre
+            referencedTableName: genre
+            referencedColumnNames: genre_id
+            onDelete: RESTRICT
+
+        - createIndex:
+            tableName: game_genre
+            indexName: idx_game_genre_genre
+            columns:
+              - column:
+                  name: genre_id
+              - column:
+                  name: app_id

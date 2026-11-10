@@ -39,3 +39,6 @@ build/
 
 ### Agent instructions ###
 agent_instructions
+
+# Downloaded Steam snapshot and generated reports
+/data/steam/

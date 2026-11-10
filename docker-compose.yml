@@ -1,18 +1,37 @@
 services:
+  data-pipeline:
+    profiles: ["data"]
+    build: ./data-pipeline
+    environment:
+      PGHOST: db
+      PGPORT: "5432"
+      PGDATABASE: ${DB_NAME}
+      PGUSER: ${DB_USERNAME}
+      PGPASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./data/steam:/data
+
   db:
     image: postgres:18.6
     restart: on-failure:3
-    
+
     ports:
       - "${POSTGRES_LOCAL_PORT}:${POSTGRES_DOCKER_PORT}"
-    
+
     volumes:
       - postgres_data:/var/lib/postgresql
-    
+
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 volumes:
   postgres_data:

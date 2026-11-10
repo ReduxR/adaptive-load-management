@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-create-game-developer-table
+      author: ReduxR
+      changes:
+        - createTable:
+            tableName: game_developer
+            columns:
+              - column:
+                  name: app_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: developer_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: game_developer
+            columnNames: app_id, developer_id
+            constraintName: pk_game_developer
+
+        - addForeignKeyConstraint:
+            baseTableName: game_developer
+            baseColumnNames: app_id
+            constraintName: fk_game_developer_game
+            referencedTableName: game
+            referencedColumnNames: app_id
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: game_developer
+            baseColumnNames: developer_id
+            constraintName: fk_game_developer_developer
+            referencedTableName: developer
+            referencedColumnNames: developer_id
+            onDelete: RESTRICT
+
+        - createIndex:
+            tableName: game_developer
+            indexName: idx_game_developer_developer
+            columns:
+              - column:
+                  name: developer_id
+              - column:
+                  name: app_id

@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changes/001-create-game-table.yaml
+  - include:
+      file: db/changelog/changes/002-create-genre-table.yaml
+  - include:
+      file: db/changelog/changes/003-create-game-genre-table.yaml
+  - include:
+      file: db/changelog/changes/004-create-developer-table.yaml
+  - include:
+      file: db/changelog/changes/005-create-game-developer-table.yaml
+  - include:
+      file: db/changelog/changes/006-create-publisher-table.yaml
+  - include:
+      file: db/changelog/changes/007-create-game-publisher-table.yaml

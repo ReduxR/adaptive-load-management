@@ -1,0 +1,48 @@
+databaseChangeLog:
+  - changeSet:
+      id: 007-create-game-publisher-table
+      author: ReduxR
+      changes:
+        - createTable:
+            tableName: game_publisher
+            columns:
+              - column:
+                  name: app_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: publisher_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: game_publisher
+            columnNames: app_id, publisher_id
+            constraintName: pk_game_publisher
+
+        - addForeignKeyConstraint:
+            baseTableName: game_publisher
+            baseColumnNames: app_id
+            constraintName: fk_game_publisher_game
+            referencedTableName: game
+            referencedColumnNames: app_id
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: game_publisher
+            baseColumnNames: publisher_id
+            constraintName: fk_game_publisher_publisher
+            referencedTableName: publisher
+            referencedColumnNames: publisher_id
+            onDelete: RESTRICT
+
+        - createIndex:
+            tableName: game_publisher
+            indexName: idx_game_publisher_publisher
+            columns:
+              - column:
+                  name: publisher_id
+              - column:
+                  name: app_id

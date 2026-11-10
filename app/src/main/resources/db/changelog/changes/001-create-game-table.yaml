@@ -1,0 +1,28 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-game-table
+      author: ReduxR
+      changes:
+        - createTable:
+            tableName: game
+            columns:
+              - column:
+                  name: app_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    nullable: false
+              - column:
+                  name: release_date
+                  type: date
+              - column:
+                  name: price
+                  type: numeric(12, 2)
+              - column:
+                  name: short_description
+                  type: text
