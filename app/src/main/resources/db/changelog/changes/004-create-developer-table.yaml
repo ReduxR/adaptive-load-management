@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 004-create-developer-table
+      author: ReduxR
+      changes:
+        - createTable:
+            tableName: developer
+            columns:
+              - column:
+                  name: developer_id
+                  type: bigint
+                  autoIncrement: true
+                  generationType: BY DEFAULT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    nullable: false
+                    unique: true

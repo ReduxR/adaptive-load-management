@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-create-publisher-table
+      author: ReduxR
+      changes:
+        - createTable:
+            tableName: publisher
+            columns:
+              - column:
+                  name: publisher_id
+                  type: bigint
+                  autoIncrement: true
+                  generationType: BY DEFAULT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: text
+                  constraints:
+                    nullable: false
+                    unique: true
