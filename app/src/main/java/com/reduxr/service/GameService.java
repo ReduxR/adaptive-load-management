@@ -1,0 +1,11 @@
+package com.reduxr.service;
+
+import com.reduxr.dto.GameResponseDto;
+import com.reduxr.dto.GameSearchParametersDto;
+import org.springframework.data.domain.Page;
+
+public interface GameService {
+    GameResponseDto getGameById(Long gameId);
+
+    Page<GameResponseDto> getGamesByParams(GameSearchParametersDto parametersDto);
+}
