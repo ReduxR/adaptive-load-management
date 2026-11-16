@@ -8,6 +8,7 @@ import com.reduxr.service.GameService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,5 +46,11 @@ public class GameController {
             @PathVariable Long gameId,
             @RequestBody UpdateGameRequestDto requestDto) {
         return gameService.updateGameById(gameId, requestDto);
+    }
+    
+    @DeleteMapping("/{gameId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteGame(@PathVariable Long gameId) {
+        gameService.deleteGameById(gameId);
     }
 }

@@ -14,4 +14,6 @@ public interface GameService {
     GameResponseDto createGame(CreateGameRequestDto requestDto);
     
     GameResponseDto updateGameById(Long gameId, UpdateGameRequestDto requestDto);
+    
+    void deleteGameById(Long gameId);
 }

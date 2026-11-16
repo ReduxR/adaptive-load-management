@@ -53,6 +53,13 @@ public class GameServiceImpl implements GameService {
         return gameMapper.toDto(game);
     }
     
+    @Override
+    public void deleteGameById(Long gameId) {
+        if (!gameRepository.existsById(gameId)) {
+            throw new EntityNotFoundException("Game with id " + gameId + " does not exist");
+        }
+        gameRepository.deleteById(gameId);
+    }
     
     private Game getGameOrThrow(Long id) {
         return gameRepository.findById(id)
