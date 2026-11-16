@@ -2,11 +2,9 @@ package com.reduxr.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class GameSearchParametersDto {
     private Integer page;
     private Integer size;

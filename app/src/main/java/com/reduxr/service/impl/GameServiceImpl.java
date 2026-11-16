@@ -3,6 +3,7 @@ package com.reduxr.service.impl;
 import com.reduxr.dto.CreateGameRequestDto;
 import com.reduxr.dto.GameResponseDto;
 import com.reduxr.dto.GameSearchParametersDto;
+import com.reduxr.dto.UpdateGameRequestDto;
 import com.reduxr.exception.EntityNotFoundException;
 import com.reduxr.mapper.GameMapper;
 import com.reduxr.model.Game;
@@ -25,10 +26,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public GameResponseDto getGameById(Long gameId) {
-        Game game = gameRepository.findGameById(gameId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Game with id " + gameId + " not found")
-                );
+        Game game = getGameOrThrow(gameId);
         return gameMapper.toDto(game);
     }
 
@@ -43,7 +41,23 @@ public class GameServiceImpl implements GameService {
     public GameResponseDto createGame(CreateGameRequestDto requestDto) {
         Game game = gameMapper.toModel(requestDto);
         entityManager.persist(game);
-        entityManager.flush();
         return gameMapper.toDto(game);
+    }
+    
+    @Override
+    @Transactional
+    public GameResponseDto updateGameById(Long gameId, UpdateGameRequestDto requestDto) {
+        Game game = getGameOrThrow(gameId);
+        
+        gameMapper.updateGame(requestDto, game);
+        return gameMapper.toDto(game);
+    }
+    
+    
+    private Game getGameOrThrow(Long id) {
+        return gameRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Can't find game by id: " + id)
+                );
     }
 }
