@@ -5,6 +5,7 @@ import com.reduxr.dto.GameResponseDto;
 import com.reduxr.dto.GameSearchParametersDto;
 import com.reduxr.dto.UpdateGameRequestDto;
 import com.reduxr.exception.EntityNotFoundException;
+import com.reduxr.exception.GameAlreadyExistsException;
 import com.reduxr.mapper.GameMapper;
 import com.reduxr.model.Game;
 import com.reduxr.repository.GameRepository;
@@ -12,6 +13,7 @@ import com.reduxr.search.GameSearchBuilder;
 import com.reduxr.service.GameService;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +42,16 @@ public class GameServiceImpl implements GameService {
     @Transactional
     public GameResponseDto createGame(CreateGameRequestDto requestDto) {
         Game game = gameMapper.toModel(requestDto);
-        entityManager.persist(game);
+        try {
+            entityManager.persist(game);
+            entityManager.flush();
+        } catch (ConstraintViolationException exception) {
+            if ("23505".equals(exception.getSQLState())) {
+                throw new GameAlreadyExistsException(
+                        "Game with id " + requestDto.getId() + " already exists.");
+            }
+            throw exception;
+        }
         return gameMapper.toDto(game);
     }
     

@@ -1,6 +1,7 @@
 package com.reduxr.search;
 
 import com.reduxr.dto.GameSearchParametersDto;
+import com.reduxr.exception.InvalidRequestException;
 import com.reduxr.model.Game;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,10 +27,10 @@ public class GameSearchBuilder {
         int page = parametersDto.getPage() == null ? 0 : parametersDto.getPage();
 
         if (size <= 0 || size > 100) {
-            throw new IllegalArgumentException("Size must be between 1 and 100");
+            throw new InvalidRequestException("Size must be between 1 and 100");
         }
         if (page < 0) {
-            throw new IllegalArgumentException("Page must not be negative");
+            throw new InvalidRequestException("Page must not be negative");
         }
 
         params.put("limit", size);

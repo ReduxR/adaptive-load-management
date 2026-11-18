@@ -1,14 +1,28 @@
 package com.reduxr.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.reduxr.validation.ValidReleaseDate;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import lombok.Data;
 
-public record CreateGameRequestDto(
-        Long id,
-        String name,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
-        LocalDate releaseDate,
-        BigDecimal price,
-        String shortDescription) {
+@Data
+public class CreateGameRequestDto {
+    @NotNull
+    @Min(1)
+    private Long id;
+
+    @NotBlank
+    private String name;
+
+    @ValidReleaseDate(minYear = 1980)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd.MM.yyyy")
+    private LocalDate releaseDate;
+
+    private BigDecimal price;
+
+    private String shortDescription;
 }
