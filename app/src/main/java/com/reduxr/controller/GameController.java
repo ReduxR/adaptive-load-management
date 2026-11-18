@@ -5,6 +5,7 @@ import com.reduxr.dto.GameResponseDto;
 import com.reduxr.dto.GameSearchParametersDto;
 import com.reduxr.dto.UpdateGameRequestDto;
 import com.reduxr.service.GameService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -37,14 +38,14 @@ public class GameController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public GameResponseDto createGame(@RequestBody CreateGameRequestDto requestDto) {
+    public GameResponseDto createGame(@Valid @RequestBody CreateGameRequestDto requestDto) {
         return gameService.createGame(requestDto);
     }
     
     @PutMapping("/{gameId}")
     public GameResponseDto updateGame(
             @PathVariable Long gameId,
-            @RequestBody UpdateGameRequestDto requestDto) {
+            @Valid @RequestBody UpdateGameRequestDto requestDto) {
         return gameService.updateGameById(gameId, requestDto);
     }
     
